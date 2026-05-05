@@ -34,11 +34,11 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="max-w-3xl mx-auto space-y-4 p-6">
 
-      <h2 className="text-2xl font-semibold">
-        System Status
-      </h2>
+<h2 className="text-3xl font-semibold text-[#313851]">
+  System Status
+</h2>
 
       {/* LOADING STATE */}
       {loading && (
