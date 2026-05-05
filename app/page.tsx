@@ -1,11 +1,17 @@
+import StatusCard from "@/components/status-card"
 
 export default function Home() {
   return (
-    <div className="p-10">
-      <h1 className="text-3xl font-semibold">Drift Status</h1>
-      <p className="text-gray-500 mt-2">
-        System status & incident tracker
-      </p>
+    <div className="space-y-4">
+
+      <h2 className="text-2xl font-semibold">
+        System Status
+      </h2>
+
+      <StatusCard service="API" status="Operational" />
+      <StatusCard service="Database" status="Operational" />
+      <StatusCard service="Auth" status="Down" />
+
     </div>
   )
 }
