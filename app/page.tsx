@@ -1,55 +1,53 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { supabase } from "@/lib/supabase"
-import StatusCard from "@/components/status-card"
-import { motion, AnimatePresence } from "framer-motion"
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase";
+import StatusCard from "@/components/status-card";
+import { motion, AnimatePresence } from "framer-motion";
+import AddService from "@/components/add-service";
 
 type Service = {
-  id: string
-  name: string
-  status: string
-}
+  id: string;
+  name: string;
+  status: string;
+};
 
 export default function Home() {
-  const [services, setServices] = useState<Service[]>([])
-  const [loading, setLoading] = useState(true)
-
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    getServices()
-  }, [])
+    getServices();
 
+    const interval = setInterval(() => {
+      getServices();
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
   async function getServices() {
-    setLoading(true)
+    setLoading(true);
 
-    const { data, error } = await supabase
-      .from("services")
-      .select("*")
+    const { data, error } = await supabase.from("services").select("*");
 
-    console.log("DATA:", data)
-    console.log("ERROR:", error)
+    console.log("DATA:", data);
+    console.log("ERROR:", error);
 
-    setServices(data ?? [])
-    setLoading(false)
+    setServices(data ?? []);
+    setLoading(false);
   }
 
   return (
     <div className="max-w-3xl mx-auto space-y-4 p-6">
+      <h2 className="text-2xl font-semibold text-[#313851]">System Status</h2>
 
-<h2 className="text-3xl font-semibold text-[#313851]">
-  System Status
-</h2>
+     <AddService onSuccess={getServices} />
 
       {/* LOADING STATE */}
-      {loading && (
-        <p className="text-gray-500">Loading services...</p>
-      )}
+      {loading && <p className="text-gray-500">Loading services...</p>}
 
       {/* EMPTY STATE */}
       {!loading && services.length === 0 && (
-        <p className="text-gray-500">
-          No services found in database
-        </p>
+        <p className="text-gray-500">No services found in database</p>
       )}
 
       {/* DATA LIST */}
@@ -62,14 +60,10 @@ export default function Home() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <StatusCard
-              service={service.name}
-              status={service.status}
-            />
+            <StatusCard service={service.name} status={service.status} />
           </motion.div>
         ))}
       </AnimatePresence>
-
     </div>
-  )
+  );
 }
